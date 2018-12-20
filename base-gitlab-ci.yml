@@ -9,7 +9,7 @@ build:
 publish:
     script:
       - npm install
-      - echo '//npm-registry.gog.prod:4873/:_authToken="$AUTH"'>.npmrc
+      - echo '//npm-registry.gog.prod:4873/:_authToken="H2t6ojcWpygg93mNQCJVm+K8kYY5yjfvG+d6+slEjlU="'>.npmrc
       - npm run publish-please --ci
     only:
       - master
