@@ -1,0 +1,15 @@
+build:
+    script:
+      - npm install
+      - npm run build
+      - npm run test
+    except:
+      - master
+
+publish:
+    script:
+      - npm install
+      - echo '//npm-registry.gog.prod:4873/:_authToken="$AUTH"'>.npmrc
+      - npm run publish-please --ci
+    only:
+      - master
