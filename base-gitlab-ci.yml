@@ -1,6 +1,6 @@
 build:
     script:
-      - npm install
+      - npm ci
       - npm run build
       - npm run test
     except:
@@ -8,7 +8,7 @@ build:
 
 publish:
     script:
-      - npm install
+      - npm ci
       - echo '//$NPM_REGISTRY/:_authToken="$AUTH_TOKEN"'>.npmrc/
       - npm run publish-please --ci
     only:
