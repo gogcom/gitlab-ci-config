@@ -1,3 +1,6 @@
+image:
+  name: 'registry-gitlab.gog.com/docker/nodejs:10'
+
 build:
     script:
       - npm ci
