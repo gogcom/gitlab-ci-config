@@ -12,7 +12,7 @@ build:
 publish:
     script:
       - npm ci
-      - echo '//$NPM_REGISTRY/:_authToken="$AUTH_TOKEN"'>.npmrc
+      - echo //$NPM_REGISTRY/:_authToken="$AUTH_TOKEN">.npmrc
       - npm run publish-please --ci
     only:
       - master
