@@ -1,0 +1,36 @@
+image:
+  name: 'registry-gitlab.gog.com/docker/nodejs:14-slim-chrome'
+
+build:
+  script:
+    - npm ci
+    - npm run ci:branch
+  except:
+    - master
+
+publish:
+  script:
+    - npm ci
+    - echo //$NPM_REGISTRY/:_authToken="$AUTH_TOKEN">.npmrc
+    - npm run ci:master
+  only:
+    - master
+
+sonarqube:
+  only:
+    - master
+  stage: test
+  allow_failure: true
+  script:
+    - docker pull registry-gitlab.gog.com/docker/sonar-scanner
+    - docker run --rm -i -v "${PWD}":/data/application -v "${PWD}/sonar-project.properties":/root/sonar-scanner-linux/conf/sonar-scanner.properties registry-gitlab.gog.com/docker/sonar-scanner sonar-scanner
+
+sonarqube-merge-request:
+  except:
+    - master
+  stage: test
+  allow_failure: true
+  script:
+    - docker pull registry-gitlab.gog.com/docker/sonar-scanner
+    - docker run --rm $(env | grep -i gog | awk '{print "-e "$$1}') -i -v "${PWD}":/data/application -v "${PWD}/sonar-project.properties":/root/sonar-scanner-linux/conf/sonar-scanner.properties registry-gitlab.gog.com/docker/sonar-scanner sh -c "/root/sonar-scanner-linux/bin/sonar-scanner -Dsonar.analysis.mode=preview -Dsonar.gitlab.commit_sha=${CI_COMMIT_SHA} -Dsonar.gitlab.ref_name=${CI_COMMIT_REF_NAME} -Dsonar.gitlab.project_id=${CI_PROJECT_PATH}"
+
